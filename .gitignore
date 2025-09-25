@@ -19,3 +19,12 @@ image/discourse_dev/redis.template.yml
 .gc-state/*
 .vagrant/
 tmp/*
+
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Secrets backup files
+secrets-backup-*.json

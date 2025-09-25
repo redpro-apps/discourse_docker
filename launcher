@@ -180,6 +180,20 @@ fatal () {
   exit "${2:-1}"
 }
 
+# Load secrets from AWS Secrets Manager or .env file
+load_discourse_secrets() {
+    local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    local load_script="$script_dir/scripts/load_secrets.sh"
+
+    if [[ -f "$load_script" ]]; then
+        echo "Loading Discourse secrets..."
+        source "$load_script"
+    else
+        echo "WARNING: load_secrets.sh not found. Secrets will not be loaded."
+        echo "Expected location: $load_script"
+    fi
+}
+
 install_docker() {
   echo "Docker is not installed, you will need to install Docker in order to run Launcher"
   echo "See https://docs.docker.com/installation/"
@@ -403,6 +417,10 @@ RUBY
     raw=`exec cat "$tmp_input_file" | $docker_path run $user_args --rm -i -a stdin -a stdout $image ruby -e "$env_ruby"`
 
     rm -f "$tmp_input_file"
+
+    # Load secrets from AWS Secrets Manager or .env file
+    load_discourse_secrets
+
 
     env=()
     ok=1
