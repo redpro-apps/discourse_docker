@@ -419,7 +419,7 @@ RUBY
     rm -f "$tmp_input_file"
 
     # Load secrets from AWS Secrets Manager or .env file
-    load_discourse_secrets
+    # load_discourse_secrets  # Temporarily disabled to bypass hanging issue
 
 
     env=()
